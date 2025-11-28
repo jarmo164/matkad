@@ -3,7 +3,10 @@ const matk1 = {
     nimetus: "Sügismatk Kõrvemaal",
     pildiUrl: "/assets/Hills.png",
     kirjeldus: "Lähme ja oleme kolm päeva looduses",
-    osalejad: ["mati@matkaja.ee", "kati@matkaja.ee"]
+    osalejad: [
+        {nimi: "mati", email: "mati@matkaja.ee"}, 
+        {nimi: "kati", email: "kati@matkaja.ee"}
+    ]
 }
 
 const matk2 = {
@@ -11,7 +14,10 @@ const matk2 = {
     nimetus: "Süstamatk Hiiumaal",
     pildiUrl: "/assets/Butterfly.png",
     kirjeldus: "Lähme ja oleme kolm päeva vee peal",
-    osalejad: ["mati@matkaja.ee", "kati@matkaja.ee", "uudo@ryhkija.ee"]
+    osalejad: [
+        {nimi: "mati", email: "mati@matkaja.ee"}, 
+        {nimi: "kati", email: "kati@matkaja.ee"}, 
+        {nimi: "uudo", email: "uudo@ryhkija.ee"}]
 }
 
 const matkad = [
@@ -22,7 +28,9 @@ const matkad = [
         nimetus: "Mägimatk Otepääl",
         pildiUrl: "/assets/Shadow.png",
         kirjeldus: "Lähme ja oleme kolm päeva mägedes",
-        osalejad: ["uudo@ryhkija.ee"]
+        osalejad: [
+            {nimi: "uudo", email: "uudo@ryhkija.ee"}
+        ]
     }
 ]
 
@@ -39,4 +47,17 @@ export function getHikeById(hikeId) {
 }
 
 export default matkad
- 
+
+export function addRegistration(matkId, nimi, email) {
+    
+    if (!nimi || !email) {
+        return false
+    }
+    const matk = getHikeById(matkId)
+    
+    if (!matk) {
+        return false
+    }
+    matk.osalejad.push({ nimi, email })
+    return matk
+}

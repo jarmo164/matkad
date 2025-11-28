@@ -1,4 +1,4 @@
-import { getAllHikes, getHikeById } from '../model/hikes.js'
+import { getAllHikes, getHikeById, addRegistration } from '../model/hikes.js'
 
 export function indexCntrl(request, response) {
     const matkadArray = getAllHikes()
@@ -53,4 +53,21 @@ export function uudisedCntrl (request, response) {
         }
     ];
     response.render("uudised", { uudised: uudised });
+}
+export function registerHikeCntrl(request, response) {
+    const matkId = parseInt(request.params.id)
+    if (!matkId) {
+        return response.status(400).send('Matka ei leitud')
+    }
+    const nimi = request.query.nimi
+    const email = request.query.email
+    
+    //andmete valideerimine
+    const lisatud = addRegistration(matkId, nimi, email)
+    if (!lisatud) {
+        response.render("matk", { matk: getHikeById(matkId), error:"Ei õnnestunud lisada registreerumist", success: null })
+        return
+    }
+    
+    response.render("matk", { matk: getHikeById(matkId), error: null, success:"Registreerumine õnnestunud" })
 }
