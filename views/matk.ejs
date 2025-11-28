@@ -13,29 +13,46 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="header-container">
+        <div class="container">
+            <%- include('components/header') %>
+        </div>
+    </div>
+    
     <div class="container">
-        <%- include('components/header') %>
         <div class="matk-detail mt-4">
-            <div class="row">
-                <div class="col-lg-12 mb-4">
-                    <a href="/" class="btn btn-secondary">← Tagasi</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
+            <!-- Matka päisepilt -->
+            <div class="row mb-4">
+                <div class="col-lg-12">
                     <img src="<%= matk.pildiUrl %>" alt="<%= matk.nimetus %>" class="img-fluid rounded">
                 </div>
-                <div class="col-lg-6">
-                    <h1 class="mb-3"><%= matk.nimetus %></h1>
+            </div>
+            
+            <!-- Matka nimetus -->
+            <div class="row mb-3">
+                <div class="col-lg-12">
+                    <h1><%= matk.nimetus %></h1>
+                </div>
+            </div>
+            
+            <!-- Matka kirjeldus -->
+            <div class="row mb-4">
+                <div class="col-lg-12">
                     <p class="lead"><%= matk.kirjeldus %></p>
-                    <div class="mt-4">
-                        <h3>Osalejad</h3>
-                        <ul class="list-group">
-                            <% matk.osalejad.forEach(osaleja => { %>
-                            <li class="list-group-item"><%= osaleja %></li>
-                            <% }); %>
-                        </ul>
-                    </div>
+                </div>
+            </div>
+            
+            <!-- Registreerunud osalejate arv -->
+            <div class="row mb-4">
+                <div class="col-lg-12">
+                    <p>Registreerunud osalejate arv: <%= matk.osalejad ? matk.osalejad.length : 0 %></p>
+                </div>
+            </div>
+            
+            <!-- Vorm -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <p class="text-muted">Järgmine kord lisame siia ka vormi</p>
                 </div>
             </div>
         </div>
