@@ -1,0 +1,21 @@
+### GET all hikes
+GET http://localhost:8085/api/matk
+
+### GET one hike by ID
+GET http://localhost:8085/api/matk/1
+
+### GET one hike by ID (another example)
+GET http://localhost:8085/api/matk/2
+
+### POST add hike
+POST http://localhost:8085/api/matk
+Content-Type: application/json
+
+{
+    "nimetus": "Sügismatk Kõrvemaal",
+    "kirjeldus": "Lähme ja oleme kolm päeva looduses",
+    "pildiUrl": "/assets/Hills.png"
+}
+
+### GET all news
+GET http://localhost:8085/api/uudised
