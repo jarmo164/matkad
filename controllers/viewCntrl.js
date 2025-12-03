@@ -16,7 +16,7 @@ export function matkDetailCntrl(request, response) {
         return response.status(404).send('Matka ei leitud')
     }
     
-    response.render("matk", { matk })
+    response.render("matk", { matk, error: null, success: null })
 }
 
 export function uudisedCntrl (request, response) {
@@ -63,6 +63,17 @@ export function registerHikeCntrl(request, response) {
     const email = request.query.email
     
     //andmete valideerimine
+    if ((!nimi || nimi.trim() === '') && (!email || email.trim() === '')) {
+        response.render("matk", { matk: getHikeById(matkId), error: "Nimi ja email on tühjad", success: null })
+        return
+    } else if (!nimi || nimi.trim() === '') {
+        response.render("matk", { matk: getHikeById(matkId), error: "Nimi tyhi", success: null })
+        return
+    } else if (!email || email.trim() === '') {
+        response.render("matk", { matk: getHikeById(matkId), error: "Email tyhi.", success: null })
+        return
+    }
+    
     const lisatud = addRegistration(matkId, nimi, email)
     if (!lisatud) {
         response.render("matk", { matk: getHikeById(matkId), error:"Ei õnnestunud lisada registreerumist", success: null })
