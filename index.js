@@ -1,6 +1,6 @@
 import express from 'express'
 import { kontaktCntrl, indexCntrl, matkDetailCntrl, uudisedCntrl, registerHikeCntrl } from './controllers/viewCntrl.js'
-import { returnAllHikesCntrl, apiAddHikeCntrl, getHikeByIdCntrl, getAllNewsCntrl } from './controllers/apiCntrl.js'
+import { returnAllHikesCntrl, apiAddHikeCntrl, getHikeByIdCntrl, getAllNewsCntrl, apideleteHikeByIdCntrl, apipatchHikeByIdCntrl } from './controllers/apiCntrl.js'
 
 
 
@@ -22,6 +22,8 @@ app.get('/', indexCntrl)
 
 app.get('/api/matk', returnAllHikesCntrl)
 app.get('/api/matk/:id', getHikeByIdCntrl)
+app.delete('/api/matk/:id', apideleteHikeByIdCntrl)
+app.patch('/api/matk/:id', apipatchHikeByIdCntrl)
 app.post('/api/matk', apiAddHikeCntrl)
 app.get('/api/uudised', getAllNewsCntrl)
  

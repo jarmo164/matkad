@@ -1,21 +1,47 @@
-### GET all hikes
+### GET kõik matkad
 GET http://localhost:8085/api/matk
 content-type: application/json
-### GET one hike by ID
+### GET üks matk ID järgi
 GET http://localhost:8085/api/matk/1
     content-type: application/json
-### GET one hike by ID (another example)
+### GET üks matk ID järgi (veel üks näide)
 GET http://localhost:8085/api/matk/2
 content-type: application/json
-### POST add hike
+### POST lisa matk
 POST http://localhost:8085/api/matk
 Content-Type: application/json
 
 {
-    "nimetus": "Sügismatk Kõrvemaal",
-    "kirjeldus": "Lähme ja oleme kolm päeva looduses",
-    "pildiUrl": "/assets/Hills.png"
+    "nimetus": "Talvematk Soomaal",
+    "kirjeldus": "Suusatame läbi lumise Soomaa rahvuspargi ja nautime talvise looduse ilu",
+    "pildiUrl": "/assets/Hiker.png"
 }
 
-### GET all news
+### GET kõik uudised
 GET http://localhost:8085/api/uudised
+
+### DELETE üks matk ID järgi
+DELETE http://localhost:8085/api/matk/1
+content-type: application/json
+
+
+### MAtka kõik osalejad
+GET http://localhost:8085/api/matk/1/osalejad
+content-type: application/json
+
+### ühe osaleja lisamine
+POST http://localhost:8085/api/matk/1/osalejad
+Content-Type: application/json
+
+{
+    "nimi": "Märt",
+    "email": "märt@matkaja.ee"
+}
+### Matka muutmine
+PATCH http://localhost:8085/api/matk/1
+Content-Type: application/json
+
+{   
+    "osalejad": [],
+    "nimetus": "UUS NIMI"
+}    

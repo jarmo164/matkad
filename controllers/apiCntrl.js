@@ -1,4 +1,4 @@
-import { getAllHikes, getHikeById } from '../model/hikes.js'
+import { getAllHikes, getHikeById, patchHikeById, addHike } from '../model/hikes.js'
 
 export function returnAllHikesCntrl(request, response) {
     const matkad = getAllHikes()
@@ -69,4 +69,40 @@ export function getAllNewsCntrl(request, response) {
 
 export function apiAddHikeCntrl(request, response) {
     console.log('Uus matk lisatud:', request.body)
-}   
+    const { nimetus, kirjeldus, pildiUrl } = request.body
+    
+    if (!nimetus) {
+        return response.status(400).json({ error: 'Nimetus on kohustuslik väli' })
+    }
+    
+    try {
+        const newHikeId = addHike({ nimetus, kirjeldus, pildiUrl })
+        const newHike = getHikeById(newHikeId)
+        response.status(201).json(newHike)
+    } catch (error) {
+        return response.status(500).json({ error: error.message })
+    }
+}
+export function apideleteHikeByIdCntrl(request, response) {
+    console.log('Matk kustutatud:', request.params.id)
+}
+export function apipatchHikeByIdCntrl(request, response) {
+    const matkId = parseInt(request.params.id)
+    
+    if (!matkId) {
+        return response.status(400).json({ error: 'Vigane matka ID' })
+    }
+    
+    const patch = {
+        nimetus: request.body.nimetus,
+        kirjeldus: request.body.kirjeldus,
+        osalejad: request.body.osalejad
+    }
+    
+    try {
+        const matk = patchHikeById(matkId, patch)
+        response.status(200).json(matk)
+    } catch (error) {
+        return response.status(404).json({ error: error.message })
+    }
+}

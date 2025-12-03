@@ -1,4 +1,4 @@
-const matk1 = {
+let matk1 = {
     id: 1,
     nimetus: "Sügismatk Kõrvemaal",
     pildiUrl: "/assets/Hills.png",
@@ -9,7 +9,7 @@ const matk1 = {
     ]
 }
 
-const matk2 = {
+let matk2 = {
     id: 2,
     nimetus: "Süstamatk Hiiumaal",
     pildiUrl: "/assets/Butterfly.png",
@@ -20,7 +20,7 @@ const matk2 = {
         {nimi: "uudo", email: "uudo@ryhkija.ee"}]
 }
 
-const matkad = [
+let matkad = [
     matk1,
     matk2,
     {
@@ -59,5 +59,46 @@ export function addRegistration(matkId, nimi, email) {
         return false
     }
     matk.osalejad.push({ nimi, email })
+    return matk
+}                   
+
+export function addHike({nimetus, kirjeldus, pildiUrl}) {
+    const newHike = {
+        id: matkad.length + 1,
+        nimetus,
+        kirjeldus,
+        pildiUrl:pildiUrl||"/assets/Hills.png",
+        osalejad: []
+    }   
+    matkad.push(newHike)
+    return newHike.id  
+}
+
+export function deleteHikeById(hikeId) {
+    const matk = getHikeById(hikeId)
+    
+    if (!matk) {
+        throw new Error('Matka ei leitud')
+    }
+    matkad = matkad.filter((element) => {
+        element.id !== hikeId
+    })
+    
+}
+
+export function patchHikeById(hikeId, {nimetus, kirjeldus, osalejad}) {
+    const matk = getHikeById(hikeId)
+    if (!matk) {
+        throw new Error('Matka ei leitud')
+    }
+    if (nimetus !== undefined) {
+        matk.nimetus = nimetus
+    }
+    if (kirjeldus !== undefined) {
+        matk.kirjeldus = kirjeldus
+    }
+    if (osalejad !== undefined) {
+        matk.osalejad = osalejad
+    }
     return matk
 }
