@@ -1,8 +1,8 @@
 ### GET kõik matkad
 GET http://localhost:8085/api/matk
 content-type: application/json
-### GET üks matk ID järgi
-GET http://localhost:8085/api/matk/1
+### GET üks matk ID järgi ID ON VIGANE 
+GET http://localhost:8085/api/matk/56xsd
     content-type: application/json
 ### GET üks matk ID järgi (veel üks näide)
 GET http://localhost:8085/api/matk/2
@@ -45,3 +45,6 @@ Content-Type: application/json
     "osalejad": [],
     "nimetus": "UUS NIMI"
 }    
+###Kogu matka info 
+GET http://localhost:8085/api/matk/1
+content-type: application/json  

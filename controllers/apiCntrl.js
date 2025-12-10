@@ -106,3 +106,4 @@ export function apipatchHikeByIdCntrl(request, response) {
         return response.status(404).json({ error: error.message })
     }
 }
+

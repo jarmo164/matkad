@@ -1,7 +1,14 @@
 import express from 'express'
 import { kontaktCntrl, indexCntrl, matkDetailCntrl, uudisedCntrl, registerHikeCntrl } from './controllers/viewCntrl.js'
-import { returnAllHikesCntrl, apiAddHikeCntrl, getHikeByIdCntrl, getAllNewsCntrl, apideleteHikeByIdCntrl, apipatchHikeByIdCntrl } from './controllers/apiCntrl.js'
-
+import { returnAllHikesCntrl, 
+    apiAddHikeCntrl, 
+    getHikeByIdCntrl, 
+    getAllNewsCntrl, 
+    apideleteHikeByIdCntrl, 
+    apipatchHikeByIdCntrl, 
+    } from './controllers/apiCntrl.js'
+import { adminCntrl } from './controllers/adminview.js'
+import { initModel } from './model/hikes.js'
 
 
 
@@ -16,7 +23,7 @@ app.get('/kontakt', kontaktCntrl)
 app.get('/matk/:id', matkDetailCntrl)
 app.get('/matk/:id/registreerumine', registerHikeCntrl)
 app.get('/uudised', uudisedCntrl)
-
+app.get('/admin', adminCntrl)
 app.get('/', indexCntrl)
 
 
@@ -26,8 +33,11 @@ app.delete('/api/matk/:id', apideleteHikeByIdCntrl)
 app.patch('/api/matk/:id', apipatchHikeByIdCntrl)
 app.post('/api/matk', apiAddHikeCntrl)
 app.get('/api/uudised', getAllNewsCntrl)
- 
+
 
 
 const port = process.env.PORT || 8085
-app.listen(port, () => console.log(`Server is running on port ${port}`))
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`)
+    initModel()
+})

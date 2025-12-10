@@ -1,44 +1,38 @@
-let matk1 = {
-    id: 1,
-    nimetus: "Sügismatk Kõrvemaal",
-    pildiUrl: "/assets/Hills.png",
-    kirjeldus: "Lähme ja oleme kolm päeva looduses",
-    osalejad: [
-        {nimi: "mati", email: "mati@matkaja.ee"}, 
-        {nimi: "kati", email: "kati@matkaja.ee"}
-    ]
+import {join} from "path"
+import {writeFileSync, readFileSync, existsSync} from "fs"
+const hikesFilePath = join(process.cwd(), process.env.DATA_FILE_HIKES)
+
+
+let matkad = []
+
+// Kontrolli, kas hikes.json fail eksisteerib, kui mitte, loo see algandmetega
+if (!existsSync(hikesFilePath)) {
+    writeFileSync(hikesFilePath, JSON.stringify(matkad, null, 2), "utf-8")
+} else {
+    // Kui fail eksisteerib, loe andmed sealt
+    const hikes = JSON.parse(readFileSync(hikesFilePath, "utf-8"))
+    matkad = hikes
+}
+function storeAllHikes() {
+    writeFileSync(hikesFilePath, JSON.stringify(matkad))
 }
 
-let matk2 = {
-    id: 2,
-    nimetus: "Süstamatk Hiiumaal",
-    pildiUrl: "/assets/Butterfly.png",
-    kirjeldus: "Lähme ja oleme kolm päeva vee peal",
-    osalejad: [
-        {nimi: "mati", email: "mati@matkaja.ee"}, 
-        {nimi: "kati", email: "kati@matkaja.ee"}, 
-        {nimi: "uudo", email: "uudo@ryhkija.ee"}]
+function loadAllHikes() {
+    const hikesString = readFileSync(hikesFilePath, "utf-8")
+    matkad = JSON.parse(hikesString)
 }
 
-let matkad = [
-    matk1,
-    matk2,
-    {
-        id: 3,
-        nimetus: "Mägimatk Otepääl",
-        pildiUrl: "/assets/Shadow.png",
-        kirjeldus: "Lähme ja oleme kolm päeva mägedes",
-        osalejad: [
-            {nimi: "uudo", email: "uudo@ryhkija.ee"}
-        ]
-    }
-]
+export function initModel() {
+    loadAllHikes()  
+}
 
 export function getAllHikes() {
+    loadAllHikes()
     return matkad
 }
 
 export function getHikeById(hikeId) {
+    loadAllHikes()
     const matk = matkad.find(matk => {
         return matk.id === hikeId
     })
@@ -71,6 +65,7 @@ export function addHike({nimetus, kirjeldus, pildiUrl}) {
         osalejad: []
     }   
     matkad.push(newHike)
+    storeAllHikes()
     return newHike.id  
 }
 
@@ -81,9 +76,9 @@ export function deleteHikeById(hikeId) {
         throw new Error('Matka ei leitud')
     }
     matkad = matkad.filter((element) => {
-        element.id !== hikeId
+        return element.id !== hikeId
     })
-    
+    storeAllHikes()
 }
 
 export function patchHikeById(hikeId, {nimetus, kirjeldus, osalejad}) {
@@ -100,5 +95,6 @@ export function patchHikeById(hikeId, {nimetus, kirjeldus, osalejad}) {
     if (osalejad !== undefined) {
         matk.osalejad = osalejad
     }
+    storeAllHikes()
     return matk
 }
