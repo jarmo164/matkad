@@ -53,10 +53,11 @@ export function addRegistration(matkId, nimi, email) {
         return false
     }
     matk.osalejad.push({ nimi, email })
+    storeAllHikes()
     return matk
 }                   
 
-export function addHike({nimetus, kirjeldus, pildiUrl}) {
+export async function addHike({nimetus, kirjeldus, pildiUrl}) {
     const newHike = {
         id: matkad.length + 1,
         nimetus,

@@ -1,7 +1,7 @@
-import { getAllHikes, getHikeById, addRegistration } from '../model/hikes.js'
+import { getAllHikes, getHikeById, addRegistration } from '../model/hikesdb.js'
 
-export function indexCntrl(request, response) {
-    const matkadArray = getAllHikes()
+export async function indexCntrl(request, response) {
+    const matkadArray = await getAllHikes()
     response.render("index", { matkad:matkadArray })
 }
 
@@ -9,9 +9,9 @@ export function kontaktCntrl(request, response) {
     response.render("kontakt")
 }
 
-export function matkDetailCntrl(request, response) {
+export async function matkDetailCntrl(request, response) {
     const matkId = parseInt(request.params.id)
-    const matk = getHikeById(matkId)
+    const matk = await getHikeById(matkId)
     if (!matk) {
         return response.status(404).send('Matka ei leitud')
     }
@@ -54,7 +54,7 @@ export function uudisedCntrl (request, response) {
     ];
     response.render("uudised", { uudised: uudised });
 }
-export function registerHikeCntrl(request, response) {
+export async function registerHikeCntrl(request, response) {
     const matkId = parseInt(request.params.id)
     if (!matkId) {
         return response.status(400).send('Matka ei leitud')
@@ -64,21 +64,26 @@ export function registerHikeCntrl(request, response) {
     
     //andmete valideerimine
     if ((!nimi || nimi.trim() === '') && (!email || email.trim() === '')) {
-        response.render("matk", { matk: getHikeById(matkId), error: "Nimi ja email on tühjad", success: null })
+        const matk = await getHikeById(matkId)
+        response.render("matk", { matk, error: "Nimi ja email on tühjad", success: null })
         return
     } else if (!nimi || nimi.trim() === '') {
-        response.render("matk", { matk: getHikeById(matkId), error: "Nimi tyhi", success: null })
+        const matk = await getHikeById(matkId)
+        response.render("matk", { matk, error: "Nimi tyhi", success: null })
         return
     } else if (!email || email.trim() === '') {
-        response.render("matk", { matk: getHikeById(matkId), error: "Email tyhi.", success: null })
+        const matk = await getHikeById(matkId)
+        response.render("matk", { matk, error: "Email tyhi.", success: null })
         return
     }
     
-    const lisatud = addRegistration(matkId, nimi, email)
+    const lisatud = await addRegistration(matkId, nimi, email)
     if (!lisatud) {
-        response.render("matk", { matk: getHikeById(matkId), error:"Ei õnnestunud lisada registreerumist", success: null })
+        const matk = await getHikeById(matkId)
+        response.render("matk", { matk, error:"Ei õnnestunud lisada registreerumist", success: null })
         return
     }
     
-    response.render("matk", { matk: getHikeById(matkId), error: null, success:"Registreerumine õnnestunud" })
+    const matk = await getHikeById(matkId)
+    response.render("matk", { matk, error: null, success:"Registreerumine õnnestunud" })
 }

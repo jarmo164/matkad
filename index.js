@@ -6,6 +6,7 @@ import { returnAllHikesCntrl,
     getAllNewsCntrl, 
     apideleteHikeByIdCntrl, 
     apipatchHikeByIdCntrl, 
+    apiAddOsalejadCntrl,
     } from './controllers/apiCntrl.js'
 import { adminCntrl } from './controllers/adminview.js'
 import { initModel } from './model/hikes.js'
@@ -33,11 +34,12 @@ app.delete('/api/matk/:id', apideleteHikeByIdCntrl)
 app.patch('/api/matk/:id', apipatchHikeByIdCntrl)
 app.post('/api/matk', apiAddHikeCntrl)
 app.get('/api/uudised', getAllNewsCntrl)
+app.post('/api/matk/:id/osalejad', apiAddOsalejadCntrl)
 
 
 
 const port = process.env.PORT || 8085
-app.listen(port, () => {
+app.listen(port, async () => {
     console.log(`Server is running on port ${port}`)
-    initModel()
+    await initModel()
 })

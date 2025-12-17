@@ -1,7 +1,7 @@
-import { getAllHikes, getHikeById, patchHikeById, addHike } from '../model/hikes.js'
+import { getAllHikes, getHikeById, patchHikeById, addHike, addRegistration } from '../model/hikesdb.js'
 
-export function returnAllHikesCntrl(request, response) {
-    const matkad = getAllHikes()
+export async function returnAllHikesCntrl(request, response) {
+    const matkad = await getAllHikes()
     response.json(matkad.map(matk => ({
         id: matk.id,
         nimetus: matk.nimetus,
@@ -10,13 +10,13 @@ export function returnAllHikesCntrl(request, response) {
     })))
 }
 
-export function getHikeByIdCntrl(request, response) {
+export async function getHikeByIdCntrl(request, response) {
     const matkId = parseInt(request.params.id)
     if (!matkId) {
         return response.status(400).json({ error: 'Vigane matka ID' })
     }
     
-    const matk = getHikeById(matkId)
+    const matk = await getHikeById(matkId)
     if (!matk) {
         return response.status(404).json({ error: 'Matka ei leitud' })
     }
@@ -67,7 +67,7 @@ export function getAllNewsCntrl(request, response) {
     response.json(uudised)
 }
 
-export function apiAddHikeCntrl(request, response) {
+export async function apiAddHikeCntrl(request, response) {
     console.log('Uus matk lisatud:', request.body)
     const { nimetus, kirjeldus, pildiUrl } = request.body
     
@@ -76,8 +76,8 @@ export function apiAddHikeCntrl(request, response) {
     }
     
     try {
-        const newHikeId = addHike({ nimetus, kirjeldus, pildiUrl })
-        const newHike = getHikeById(newHikeId)
+        const newHikeId = await addHike({ nimetus, kirjeldus, pildiUrl })
+        const newHike = await getHikeById(newHikeId)
         response.status(201).json(newHike)
     } catch (error) {
         return response.status(500).json({ error: error.message })
@@ -86,7 +86,7 @@ export function apiAddHikeCntrl(request, response) {
 export function apideleteHikeByIdCntrl(request, response) {
     console.log('Matk kustutatud:', request.params.id)
 }
-export function apipatchHikeByIdCntrl(request, response) {
+export async function apipatchHikeByIdCntrl(request, response) {
     const matkId = parseInt(request.params.id)
     
     if (!matkId) {
@@ -100,10 +100,30 @@ export function apipatchHikeByIdCntrl(request, response) {
     }
     
     try {
-        const matk = patchHikeById(matkId, patch)
+        const matk = await patchHikeById(matkId, patch)
         response.status(200).json(matk)
     } catch (error) {
         return response.status(404).json({ error: error.message })
     }
 }
 
+export async function apiAddOsalejadCntrl(request, response) {
+    console.log('Osaleja lisatud:', request.body)
+    const matkId = parseInt(request.params.id)
+    
+    if (!matkId) {
+        return response.status(400).json({ error: 'Vigane matka ID' })
+    }
+    
+    if (!request.body.nimi || !request.body.email) {
+        return response.status(400).json({ error: 'Nimi ja email on kohustuslikud väljad' })
+    }
+    
+    const result = await addRegistration(matkId, request.body.nimi, request.body.email)
+    
+    if (!result) {
+        return response.status(404).json({ error: 'Matka ei leitud või osaleja lisamine ebaõnnestus' })
+    }
+    
+    response.status(201).json(result)
+}
